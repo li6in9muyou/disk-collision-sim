@@ -25,17 +25,23 @@
       console.log("config", CONFIG);
       console.groupEnd();
 
-      for (let i = 0; i < 100; i++) {
-        CONTEXT.iteration += 1;
-        update(CONTEXT, ...CONFIG);
-        const failed = asserts
-          .map((a) => a(CONTEXT))
-          .some((r) => !!r === false);
-        if (failed) {
-          console.groupEnd();
-          console.error("test halted after failed assertion");
-          return;
+      try {
+        for (let i = 0; i < 100; i++) {
+          CONTEXT.iteration += 1;
+          update(CONTEXT, ...CONFIG);
+          const failed = asserts
+            .map((a) => a(CONTEXT))
+            .some((r) => !!r === false);
+          if (failed) {
+            console.groupEnd();
+            console.error("test halted after failed assertion");
+            return;
+          }
         }
+      } catch (e) {
+        console.groupEnd();
+        console.error("test halted after simulation throws", e.stack);
+        return;
       }
       console.groupEnd();
     });
