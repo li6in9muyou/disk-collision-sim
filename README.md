@@ -47,5 +47,6 @@ type Context = SimulationCtx & CollisionQueryCtx & RendererCtx & DiskDynamics;
 4. List commits that change this directory, `git log -- day2009-bouncing-discs`. Or use helper in IDE.
 5. Cherry-pick commits from remote, `git cherry-pick f1a6884d^..5dfa0336` if commits are consecutive. Or cherry-pick them one by one.
 
-Reference: 
+Reference:
+
 - [https://www.baeldung.com/linux/git-copy-commits-between-repos](https://www.baeldung.com/linux/git-copy-commits-between-repos)
