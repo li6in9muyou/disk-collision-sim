@@ -23,32 +23,21 @@ function isArena(id) {
   return id < 0;
 }
 
-export function applyKeepMovingIfNoCollision(
+export function applyKeepMoving(
   id,
-  { position, velocity, distanceUntilCollision },
+  { minTimeUntilCollision, position, velocity },
 ) {
-  if (distanceUntilCollision.has(id)) {
-    return;
-  }
-
   const p = position.get(id);
   const v = velocity.get(id);
-  p.x += v.x;
-  p.y += v.y;
+  p.x += v.x * minTimeUntilCollision;
+  p.y += v.y * minTimeUntilCollision;
 }
 
-export function applyMoveToCollidePos(
-  id,
-  { position, distanceUntilCollision },
-) {
-  if (!distanceUntilCollision.has(id)) {
-    return;
+export function queryMinTimeUntilCollision(id, ctx) {
+  const t = ctx.timeUntilCollision.get(id);
+  if (t !== undefined) {
+    ctx.minTimeUntilCollision = Math.min(ctx.minTimeUntilCollision, t);
   }
-
-  const d = distanceUntilCollision.get(id);
-  const p = position.get(id);
-  p.x += d.x;
-  p.y += d.y;
 }
 
 export function queryArenaCollision(
@@ -381,13 +370,13 @@ let prevElapsed = NaN;
 
 export function applySpawnDisk(
   id,
-  { elapsed, entities, velocity, position, size, mass, ARENA_W, ARENA_H },
+  { iteration, entities, velocity, position, size, mass, ARENA_W, ARENA_H },
 ) {
-  if (elapsed === prevElapsed) {
+  if (iteration === prevElapsed) {
     return;
   }
-  prevElapsed = elapsed;
-  if (elapsed % 30 === 0 && entities.length < DISK_CNT_LIMIT) {
+  prevElapsed = iteration;
+  if (iteration % 30 === 0 && entities.length < DISK_CNT_LIMIT) {
     const _v = 10 + Math.random() * 90;
     const [vx, vy] = rotate(0, _v, Math.random() * 2 * Math.PI);
     const id = entities.length;
@@ -459,7 +448,7 @@ export function logTotalMomentum({ mass, velocity, entities, elapsed }) {
 }
 
 export function logReproductionInfo({
-  elapsed,
+  iteration,
   entities,
   mass,
   position,
@@ -468,7 +457,7 @@ export function logReproductionInfo({
   ARENA_W,
   ARENA_H,
 }) {
-  console.groupCollapsed(`iteration ${elapsed} reproduction info`);
+  console.groupCollapsed(`iteration ${iteration} reproduction info`);
   console.log(
     "reproduction info:\n" +
       dumpContext({
@@ -514,6 +503,6 @@ export function logDiskDistance({ entities, position, size }) {
   console.groupEnd();
 }
 
-export function logElapsed({ elapsed }) {
-  console.log(`iteration ${elapsed} ends`);
+export function logElapsed({ iteration }) {
+  console.log(`iteration ${iteration} ends`);
 }

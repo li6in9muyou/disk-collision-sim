@@ -1,8 +1,7 @@
 import { isFunction } from "./helper.js";
 import {
   applyConservationOfMomentum,
-  applyKeepMovingIfNoCollision,
-  applyMoveToCollidePos,
+  applyKeepMoving,
   applyReflectedVelocityIfCollideWithArena,
   applyRoundMinimalVelocityToZero,
   drawOrangeDisk,
@@ -13,6 +12,7 @@ import {
   logReproductionInfo,
   queryArenaCollision,
   queryDiskCollision,
+  queryMinTimeUntilCollision,
 } from "./system.js";
 
 export const commonLogSuite = [
@@ -22,16 +22,19 @@ export const commonLogSuite = [
   logElapsed,
 ];
 
-export const arenaCollision = [queryArenaCollision];
-export const arenaAndDiskCollision = [queryArenaCollision, queryDiskCollision];
+export const arenaCollision = [queryArenaCollision, queryMinTimeUntilCollision];
+export const arenaAndDiskCollision = [
+  queryArenaCollision,
+  queryDiskCollision,
+  queryMinTimeUntilCollision,
+];
 
 export const domDrawer = [drawOrangeDisk, drawVelocityPointer];
 
 export const twoDimElastic = [
+  applyKeepMoving,
   applyReflectedVelocityIfCollideWithArena,
   applyConservationOfMomentum,
-  applyMoveToCollidePos,
-  applyKeepMovingIfNoCollision,
   applyRoundMinimalVelocityToZero,
 ];
 
@@ -111,6 +114,7 @@ export function createStateFromDiskDynamics(ps) {
   ps.mass = toMap(ps.mass);
   return {
     iteration: 0,
+    minTimeUntilCollision: 1,
     collideNormal: new Map(),
     distanceUntilCollision: new Map(),
     timeUntilCollision: new Map(),
