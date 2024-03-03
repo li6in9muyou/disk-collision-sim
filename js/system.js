@@ -503,6 +503,10 @@ export function logDiskDistance({ entities, position, size }) {
   console.groupEnd();
 }
 
-export function logElapsed({ iteration }) {
+export function logIteration({ iteration }) {
   console.log(`iteration ${iteration} ends`);
+}
+
+export function logElapsed({ minTimeUntilCollision }) {
+  console.log(`simulation elapsed ${minTimeUntilCollision} frame`);
 }

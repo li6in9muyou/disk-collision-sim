@@ -9,6 +9,7 @@ import {
   logDiskDistance,
   logDiskDynamics,
   logElapsed,
+  logIteration,
   logReproductionInfo,
   queryArenaCollision,
   queryDiskCollision,
@@ -19,6 +20,7 @@ export const commonLogSuite = [
   logReproductionInfo,
   logDiskDistance,
   logDiskDynamics,
+  logIteration,
   logElapsed,
 ];
 
