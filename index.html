@@ -94,21 +94,9 @@
   </head>
   <body>
     <script type="module">
-      import {
-        buildConfig,
-        domDrawer,
-        TwoDimElasticCollision,
-      } from "./js/config.js";
+      import { buildConfig, domDrawer } from "./js/config.js";
       import update from "./js/update.js";
-      import {
-        testDiskBouncingAgainstWall,
-        testDiskBouncingAgainstWallHorizontal,
-        testDiskCollideWithArenaAtTimeZero,
-        testDiskHitArenaCorner,
-        testPushAnotherDisk,
-        testRoundingErrorIsManageable,
-        testTwoArenaCollisionInTwoFrames,
-      } from "./js/tests.js";
+      import AllTests from "./js/tests.js";
 
       function createArenaFromTest(testFn) {
         const [CONFIG, INIT, _] = testFn();
@@ -206,22 +194,8 @@
 
         return $arenaContainer.append($arena);
       }
-
-      $(document.body).append(
-        createArenaFromTest(testTwoArenaCollisionInTwoFrames),
-      );
-      $(document.body).append(
-        createArenaFromTest(testDiskBouncingAgainstWallHorizontal),
-      );
-      $(document.body).append(
-        createArenaFromTest(testDiskCollideWithArenaAtTimeZero),
-      );
-      $(document.body).append(createArenaFromTest(testDiskHitArenaCorner));
-      $(document.body).append(createArenaFromTest(testDiskBouncingAgainstWall));
-      $(document.body).append(
-        createArenaFromTest(testRoundingErrorIsManageable),
-      );
-      $(document.body).append(createArenaFromTest(testPushAnotherDisk));
+      const $body = $(document.body);
+      AllTests.forEach((test) => $body.append(createArenaFromTest(test)));
     </script>
   </body>
 </html>
