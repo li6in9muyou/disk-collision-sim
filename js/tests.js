@@ -374,6 +374,62 @@ export function testEveryCollisionQueryAccessLatestDynamics() {
   ];
 }
 
+export function testNewtonCradle() {
+  const TOTAL_H = 9 * 40;
+  const init = () =>
+    createStateFromDiskDynamics({
+      entities: [1000, 2001, 2002, 2003, 1001],
+      position: [
+        [1000, { x: 50, y: 20 }],
+        [2001, { x: 50, y: TOTAL_H / 2 - 40 }],
+        [2002, { x: 50, y: TOTAL_H / 2 }],
+        [2003, { x: 50, y: TOTAL_H / 2 + 40 }],
+        [1001, { x: 50, y: TOTAL_H / 2 + 40 * 2 }],
+      ],
+      size: [
+        [1000, { w: 40, h: 40 }],
+        [1001, { w: 40, h: 40 }],
+        [2001, { w: 40, h: 40 }],
+        [2002, { w: 40, h: 40 }],
+        [2003, { w: 40, h: 40 }],
+      ],
+      velocity: [
+        [1000, { x: 0, y: 11.23456 }],
+        [1001, { x: 0, y: 0 }],
+        [2001, { x: 0, y: 0 }],
+        [2002, { x: 0, y: 0 }],
+        [2003, { x: 0, y: 0 }],
+      ],
+      mass: [
+        [1000, 40],
+        [1001, 40],
+        [2001, 40],
+        [2002, 40],
+        [2003, 40],
+      ],
+      ARENA_W: 100,
+      ARENA_H: TOTAL_H,
+    });
+  const asserts = [
+    it("three disks in the middle remain perfectly stationary", ({
+      velocity,
+    }) => {
+      const stationaryDisks = [2001, 2002, 2003];
+      return stationaryDisks
+        .map((id) => velocity.get(id))
+        .every((v) => eq(0, v.x) && eq(0, v.y));
+    }),
+  ];
+  return [
+    buildConfig
+      .from(TwoDimElasticCollisionNoDraw)
+      .system((_, { entities }) => shuffleInPlace(entities))
+      .build(),
+    init,
+    asserts,
+  ];
+}
+
 export default [
   testDiskBouncingAgainstWall,
   testDiskBouncingAgainstWallHorizontal,
@@ -385,4 +441,5 @@ export default [
   testCollisionIsNeverMissed,
   testRoundingErrorIsManageable2,
   testEveryCollisionQueryAccessLatestDynamics,
+  testNewtonCradle,
 ];
