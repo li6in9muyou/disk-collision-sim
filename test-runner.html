@@ -26,7 +26,7 @@
         console.groupEnd();
 
         for (let i = 0; i < 100; i++) {
-          CONTEXT.elapsed += 1;
+          CONTEXT.iteration += 1;
           update(CONTEXT, ...CONFIG);
           const failed = asserts
             .map((a) => a(CONTEXT))

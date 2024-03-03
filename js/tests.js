@@ -54,7 +54,7 @@ function assertOneDiskPosition(initP, initV, expectedP) {
 
   const asserts = [
     it("should bounce back at arena wall", (ctx) => {
-      const expected = expectedP[ctx.elapsed];
+      const expected = expectedP[ctx.iteration];
       if (expected !== undefined) {
         const v = ctx.position.get(id);
         return eq(v.x, expected.x) && eq(v.y, expected.y);
@@ -199,7 +199,7 @@ export function testRoundingErrorIsManageable() {
         [1000, 40],
         [1001, 160],
       ]),
-      elapsed: 0,
+      iteration: 0,
       collideNormal: new Map(),
       distanceUntilCollision: new Map(),
       timeUntilCollision: new Map(),

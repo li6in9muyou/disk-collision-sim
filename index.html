@@ -156,11 +156,11 @@
         };
 
         function isSimulating(s) {
-          return s.iteration_limit > CONTEXT.elapsed;
+          return s.iteration_limit > CONTEXT.iteration;
         }
 
         function simulate() {
-          CONTEXT.elapsed++;
+          CONTEXT.iteration++;
 
           if (state.frames === 0) {
             state.frames_start = performance.now();
@@ -178,11 +178,11 @@
           }
 
           $iteration.text(
-            CONTEXT.elapsed.toString().padStart(4, "0") +
+            CONTEXT.iteration.toString().padStart(4, "0") +
               "/" +
               state.iteration_limit.toString().padStart(4, "0"),
           );
-          if (CONTEXT.elapsed < state.iteration_limit) {
+          if (CONTEXT.iteration < state.iteration_limit) {
             requestAnimationFrame(simulate);
           } else {
             console.info("update halts");

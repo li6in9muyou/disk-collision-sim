@@ -110,7 +110,7 @@ export function createStateFromDiskDynamics(ps) {
   ps.velocity = toMap(ps.velocity);
   ps.mass = toMap(ps.mass);
   return {
-    elapsed: 0,
+    iteration: 0,
     collideNormal: new Map(),
     distanceUntilCollision: new Map(),
     timeUntilCollision: new Map(),

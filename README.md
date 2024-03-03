@@ -19,7 +19,7 @@ type DiskDynamics = {
 };
 
 type SimulationCtx = {
-  elapsed: number;
+  iteration: number;
 };
 
 type CollisionQueryCtx = {

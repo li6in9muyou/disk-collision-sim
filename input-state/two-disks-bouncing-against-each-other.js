@@ -20,7 +20,7 @@ export const init = (ARENA_W, ARENA_H) => ({
     [1000, 40],
     [1001, 160],
   ]),
-  elapsed: 0,
+  iteration: 0,
   collideNormal: new Map(),
   distanceUntilCollision: new Map(),
   timeUntilCollision: new Map(),
