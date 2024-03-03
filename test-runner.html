@@ -12,8 +12,52 @@
   </head>
   <body>
     <script type="module">
+      import { distance, gt, isInClosedInterval } from "./js/math.js";
       import AllTests from "./js/tests.js";
       import update from "./js/update.js";
+
+      function assertNoDiskPenetration({ entities, position, size }) {
+        for (let i = 0; i < entities.length - 1; i++) {
+          const id = entities[i];
+          for (let j = i + 1; j < entities.length; j++) {
+            const other = entities[j];
+            const p1 = position.get(id);
+            const p2 = position.get(other);
+            const dCenter = distance(p1.x, p1.y, p2.x, p2.y);
+            const radiusSum = size.get(id).w / 2 + size.get(other).w / 2;
+            if (gt(radiusSum, dCenter)) {
+              return false;
+            }
+          }
+        }
+        return true;
+      }
+
+      function assertAllDisksInsideArena({
+        entities,
+        position,
+        size,
+        ARENA_W,
+        ARENA_H,
+      }) {
+        for (const id of entities) {
+          const pos = position.get(id);
+          const sz = size.get(id);
+          const radius = sz.w / 2;
+          if (!isInClosedInterval(pos.x, radius, ARENA_W - radius)) {
+            return false;
+          }
+          if (!isInClosedInterval(pos.y, radius, ARENA_H - radius)) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      const SIM_INVARIANTS = [
+        assertAllDisksInsideArena,
+        assertNoDiskPenetration,
+      ];
 
       AllTests.forEach((test) => {
         const [CONFIG, init, asserts] = test();
@@ -34,6 +78,17 @@
               console.groupEnd();
               console.error("test halted after failed assertion");
               return;
+            }
+
+            for (const assert of SIM_INVARIANTS) {
+              const ok = assert(CONTEXT);
+              if (!ok) {
+                console.groupEnd();
+                console.error(
+                  `test halted because ${assert.name} does not hold`,
+                );
+                return;
+              }
             }
           }
         } catch (e) {
