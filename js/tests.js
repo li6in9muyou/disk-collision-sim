@@ -367,7 +367,7 @@ export function testEveryCollisionQueryAccessLatestDynamics() {
   return [
     buildConfig
       .from(TwoDimElasticCollisionNoDraw)
-      .system(({ entities }) => shuffleInPlace(entities))
+      .system((_, { entities }) => shuffleInPlace(entities))
       .build(),
     init,
     asserts,
