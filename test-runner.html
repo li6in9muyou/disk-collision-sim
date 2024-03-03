@@ -1,44 +1,44 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Tests</title>
-    <style>
-      html,
-      body {
-        background-color: black;
-      }
-    </style>
-  </head>
-  <body>
-    <script type="module">
-      import AllTests from "./js/tests.js";
-      import update from "./js/update.js";
+<head>
+  <meta charset="UTF-8"/>
+  <title>Tests</title>
+  <style>
+    html,
+    body {
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+  <script type="module">
+    import AllTests from "./js/tests.js";
+    import update from "./js/update.js";
 
-      AllTests.forEach((test) => {
-        const [CONFIG, init, asserts] = test();
-        const CONTEXT = init();
+    AllTests.forEach((test) => {
+      const [CONFIG, init, asserts] = test();
+      const CONTEXT = init();
 
-        console.groupCollapsed(`${test.name}`);
+      console.groupCollapsed(`${test.name}`);
 
-        console.groupCollapsed(`config`);
-        console.log("config", CONFIG);
-        console.groupEnd();
+      console.groupCollapsed(`config`);
+      console.log("config", CONFIG);
+      console.groupEnd();
 
-        for (let i = 0; i < 100; i++) {
-          CONTEXT.iteration += 1;
-          update(CONTEXT, ...CONFIG);
-          const failed = asserts
-            .map((a) => a(CONTEXT))
-            .some((r) => !!r === false);
-          if (failed) {
-            console.groupEnd();
-            console.error("test halted after failed assertion");
-            return;
-          }
+      for (let i = 0; i < 100; i++) {
+        CONTEXT.iteration += 1;
+        update(CONTEXT, ...CONFIG);
+        const failed = asserts
+          .map((a) => a(CONTEXT))
+          .some((r) => !!r === false);
+        if (failed) {
+          console.groupEnd();
+          console.error("test halted after failed assertion");
+          return;
         }
-        console.groupEnd();
-      });
-    </script>
-  </body>
+      }
+      console.groupEnd();
+    });
+  </script>
+</body>
 </html>
