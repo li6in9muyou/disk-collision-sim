@@ -47,6 +47,14 @@ type Context = SimulationCtx & CollisionQueryCtx & RendererCtx & DiskDynamics;
 4. List commits that change this directory, `git log -- day2009-bouncing-discs`. Or use helper in IDE.
 5. Cherry-pick commits from remote, `git cherry-pick f1a6884d^..5dfa0336` if commits are consecutive. Or cherry-pick them one by one.
 
+Cherry-pick will throw fatal error if specified hash range contains merge commit.
+And commits from another branch will be "merged" to HEAD which is a very undesirable behaviour.
+
+Subtree merging approach preserves merge commits and full commit history,
+see [this link](https://mirrors.edge.kernel.org/pub/software/scm/git/docs/howto/using-merge-subtree.html)
+
+TODO: this note should be made into a blog post.
+
 Reference:
 
 - [https://www.baeldung.com/linux/git-copy-commits-between-repos](https://www.baeldung.com/linux/git-copy-commits-between-repos)
